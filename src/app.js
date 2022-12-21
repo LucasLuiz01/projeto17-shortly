@@ -2,15 +2,17 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import pkg from "pg"
+import signUpRouter from "./routes/signUp.routes.js"
 
-const app = express();
-const {pool} = pkg;
+const app = express(); 
+const {Pool} = pkg;
 dotenv.config();
 app.use(cors());
 app.use(express.json());
+app.use(signUpRouter)
 
-const connection = new Pool({
-    connectionString: "postgres://shortlybootcamp_role:senha_super_hiper_ultra_secreta_do_role_do_bootcamp@localhost:5432/boardcamp"
-})
+
+
+
 
 app.listen(4000, ()=> console.log("Server rodando na porta 4000"));
