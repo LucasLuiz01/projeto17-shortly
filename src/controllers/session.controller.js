@@ -24,12 +24,12 @@ export async function login (req, res){
     const buscandoUser = await connection.query(`SELECT * FROM "signUp" WHERE email = $1`, [email])
     console.log(buscandoUser.rows)
     if(buscandoUser.rows.length === 0){
-        return res.status(409).send("EMAIL INVALIDO");
+        return res.status(401).send("EMAIL INVALIDO");
     }
     const compararSenha = bcrypt.compareSync(password, buscandoUser.rows[0].password)
     console.log(compararSenha)
     if(!compararSenha){
-        return res.status(409).send("SENHA INCORRETA")
+        return res.status(401).send("SENHA INCORRETA")
     }
     let userId = buscandoUser.rows[0].id
   const token = uuid()
