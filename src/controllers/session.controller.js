@@ -41,7 +41,7 @@ export async function login (req, res){
     VALUES
     ($1, $2)
     `, [userId, token]);
-    return res.status(200).send({userId, token});
+    return res.status(200).send({token});
 
   }catch(err){
     console.log(err)
