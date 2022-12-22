@@ -3,6 +3,5 @@ import dotenv from "dotenv";
 const {Pool} = pkg;
 dotenv.config();
 export const connection = new Pool({
-  connectionString: process.env.DATABASE_URL,
+  connectionString: "postgres://postgres:123456@localhost:5433/shortly"
 });
-console.log("console", process.env.DATABASE_URL)
