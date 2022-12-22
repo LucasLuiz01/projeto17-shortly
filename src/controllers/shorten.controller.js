@@ -34,9 +34,32 @@ export async function getUrlId (req, res) {
             return res.status(404).send("URL NAO ENCONTRADA");
         } 
          delete getUrl.rows[0].userId
+         delete getUrl.rows[0].linkAcess
         return res.status(201).send(getUrl.rows[0]);
     }catch(err){
     console.log(err);
     return res.status(500).send(err)
     }
+}
+
+export async function openShortUrl (req, res){
+    const {shortUrl} = req.params;
+   try{ const findUrl = await connection.query(`
+    SELECT * FROM shorten
+    WHERE "shortUrl" = $1
+    `, [shortUrl])
+    if(findUrl.rows.length === 0){
+        return res.status(401).send("URL nao encontrada")
+    }
+    let adicionar = findUrl.rows[0].linkAcess + 1
+     await connection.query(`UPDATE shorten 
+    SET "linkAcess" = $1 
+    WHERE "shortUrl" = $2`, [adicionar, shortUrl]);
+    const link = findUrl.rows[0].url
+    console.log(typeof(link));
+    return res.redirect(link)
+    
+}catch (err){
+    return res.sendStatus(400)
+}
 }
