@@ -26,3 +26,17 @@ export async function shortenUrl (req, res) {
         return res.status(422).send(err.detail)
     }
 }
+export async function getUrlId (req, res) {
+    const {id} = req.params;
+    try{
+        const getUrl = await connection.query("SELECT * FROM shorten WHERE id = $1" ,[id])
+        if(getUrl.rows.length === 0){
+            return res.status(404).send("URL NAO ENCONTRADA");
+        } 
+         delete getUrl.rows[0].userId
+        return res.status(201).send(getUrl.rows[0]);
+    }catch(err){
+    console.log(err);
+    return res.status(500).send(err)
+    }
+}
