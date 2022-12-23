@@ -11,7 +11,7 @@ export async function userMe (req, res){
         const findId =  await connection.query(`SELECT * FROM "signIn" WHERE token = $1`, [token])
       console.log(findId.rows)
         if(findId.rows.length === 0){
-        return res.sendStatus(401)
+        return res.sendStatus(404)
       }
       let userId = findId.rows[0].userId
       console.log(userId)
@@ -31,4 +31,13 @@ export async function userMe (req, res){
     }catch(err){
         return res.status(404).send(err)
     }
+}
+
+export async function ranking (req, res){
+  try{
+    const rank = await connection.query(`SELECT u.id, u.name,COUNT(s."userId") AS "linksCount",COALESCE(SUM(s."linkAcess"), 0)  as "visitCount" FROM "signUp" u LEFT JOIN shorten s ON u.id = s."userId" GROUP BY u.id ORDER BY "visitCount" DESC LIMIT 10`)
+    return res.send(rank.rows);
+  }catch(err){
+    return res.status(404).send(err)
+  }
 }
